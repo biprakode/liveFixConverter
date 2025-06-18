@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fix Converter & Evaluator</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Parisienne&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <section class="heading">
+        <h1>Infix <> Postfix <> Prefix</h1>
+        <h3>Simple Converter and Evaluator of Expressions</h3>
+    </section>
+
+    <section class="input">
+        <!--Implement Input type radio-->
+        <div class="inputOptions">
+            <div class="converterTypeToggle">
+                <input type="radio" name="converterType" class="evaluator" id="evaluator" checked>
+                <input type="radio" name="converterType" class="converter" id="converter">
+
+                <div class="selector1">&nbsp;</div>
+
+                <label for="evaluator">Evaluator</label>
+                <label for="converter">Convertor</label>
+            </div>
+
+
+            <!--Implement expression type radio-->
+            <div class="inputTypeToggle">
+                <input type="radio" name="inputType" class="infix" id="infix" checked>
+                <input type="radio" name="inputType" class="postfix" id="postfix">
+                <input type="radio" name="inputType" class="prefix" id="prefix">
+
+                <div class="selector2">&nbsp;</div>
+
+                <label for="infix">Infix</label>
+                <label for="postfix">Postfix</label>
+                <label for="prefix">Prefix</label>
+            </div>
+
+        </div>
+
+        <div class="inputTextbox">
+
+            <textarea class="inputText" placeholder="Enter input expression"></textarea> <!--edit Placeholder according to input Type-->
+        </div>
+    </section>
+
+    <section class="output">
+        <div class="outputTexts">
+            <div class="infix">
+                <textarea class="infixText" placeholder="Infix expression" readonly></textarea>
+            </div>
+
+            <div class="postfix">
+                <textarea class="postfixText" placeholder="Postfix expression" readonly></textarea>
+            </div>
+
+            <div class="prefix">
+                <textarea class="prefixText" placeholder="Prefix expression" readonly></textarea>
+            </div>
+        </div>
+        <div class="result"> <!--Remove for alphabet-->
+                <textarea class="resultText" placeholder="Evaluated Result" readonly></textarea>
+        </div>
+    </section>
+    <script src='./script.js' type="module"></script>
+</body>
+</html>
