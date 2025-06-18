@@ -1,2 +1,4 @@
-import FixConverterChar from "./fixConverterChar";
-import FixConverterNum from "./fixConverterNum";
+import converterView from "./converterView.js";
+
+const root = document.querySelector('body');
+const view = new converterView(root);

@@ -1,4 +1,7 @@
 export default class FixConverterChar {
+    constructor() {
+    }
+
     isChar(char) {
         return /^[a-zA-Z]$/.test(char);
     }
@@ -17,6 +20,28 @@ export default class FixConverterChar {
             default: return -1;
         }
     }
+
+    evalInfix(exp) {
+        const infix = exp;
+        const prefix = this.charInfixToPrefix(infix);
+        const postfix = this.charInfixToPostfix(infix);
+        return {infix:infix , prefix:prefix , postfix:postfix};
+    }
+
+    evalPrefix(exp) {
+        const prefix = exp;
+        const infix = this.charPrefixToInfix(prefix);
+        const postfix = this.charPrefixToPostfix(prefix);
+        return {infix:infix , prefix:prefix , postfix:postfix};
+    }
+
+    evalPostfix(exp) {
+        const postfix = exp;
+        const infix = this.charPostfixToInfix(postfix);
+        const prefix = this.charPostfixToPrefix(postfix);
+        return {infix:infix , prefix:prefix , postfix:postfix};
+    }
+
 
     charInfixToPostfix(exp) {
         let stack = [], ans = [];

@@ -1,6 +1,39 @@
 export default class FixConverterNum {
+    constructor() {
+    }
+
+    tokenize(exp) {
+        let tokens = [];
+        let numberBuffer="";
+
+        for (let char of exp) {
+            if(/\d/.test(char) || char === '.') {
+                numberBuffer += char;
+            } else if (this.isOperator(char) || char === '(' || char === ')') {
+                if (numberBuffer.length > 0) {
+                    tokens.push(numberBuffer);
+                    numberBuffer = "";
+                } 
+                tokens.push(char);
+            } else if(char === ' ') {
+                if (numberBuffer.length > 0) {
+                    tokens.push(numberBuffer);
+                    numberBuffer = "";
+                } 
+            }
+            else {
+                throw new Error(`Invalid character '${char}'`);
+            }
+        }
+
+    if (numberBuffer.length > 0) {
+        tokens.push(numberBuffer);
+    }
+    return tokens;
+    }
+
     isNum(char) {
-        return /^[0-9]$/.test(char);
+        return /^-?\d+(\.\d+)?$/.test(char);
     }
 
     isOperator(char) {
@@ -29,7 +62,7 @@ export default class FixConverterNum {
             throw new Error("Mismatched ouput");
         }
 
-        return postVal;
+        return {infix:exp , prefix:prefix , postfix:postfix , eval:preVal};
     }
 
     evalPostfix(exp) {
@@ -43,7 +76,7 @@ export default class FixConverterNum {
             throw new Error("Mismatched ouput");
         }
 
-        return postVal;
+        return {infix:this.numPostfixToInfix(postfix) , prefix:prefix , postfix:postfix , eval:preVal};
     }
 
     evalPrefix(exp) {
@@ -57,13 +90,13 @@ export default class FixConverterNum {
             throw new Error("Mismatched ouput");
         }
 
-        return postVal;
+        return {infix:this.numPrefixToInfix(prefix) , prefix:prefix , postfix:postfix , eval:preVal};
     }
 
     numInfixToPostfix(exp) {
         let stack = [], ans = [];
 
-        exp.split(' ').forEach((char, index) => {
+        this.tokenize(exp).forEach((char, index) => {
             if (this.isNum(char)) {
                 ans.push(char);
             } else if (char === '(') {
@@ -97,7 +130,7 @@ export default class FixConverterNum {
     numInfixToPrefix(exp) {
         let stack = [], ans = [];
 
-        let expArr = exp.split(' ').reverse().map(char => {
+        let expArr = this.tokenize(exp).reverse().map(char => {
             if (char === '(') return ')';
             if (char === ')') return '(';
             return char;
@@ -135,14 +168,14 @@ export default class FixConverterNum {
     numPostfixToInfix(exp) {
         let stack = [];
 
-        exp.split(' ').forEach((char, index) => {
+        this.tokenize(exp).forEach((char, index) => {
             if (this.isNum(char)) {
                 stack.push(char);
             } else if (this.isOperator(char)) {
                 if (stack.length < 2) throw new Error("Invalid postfix expression");
                 let op2 = stack.pop();
                 let op1 = stack.pop();
-                let expr = `(${op1}${char}${op2})`;
+                let expr = `${op1} ${char} ${op2}`;
                 stack.push(expr);
             } else {
                 throw new Error(`Invalid character '${char}' at position ${index}`);
@@ -156,14 +189,14 @@ export default class FixConverterNum {
     numPrefixToInfix(exp) {
         let stack = [];
 
-        exp.split(' ').reverse().forEach((char, index) => {
+        this.tokenize(exp).reverse().forEach((char, index) => {
             if (this.isNum(char)) {
                 stack.push(char);
             } else if (this.isOperator(char)) {
                 if (stack.length < 2) throw new Error("Invalid prefix expression");
                 let op1 = stack.pop();
                 let op2 = stack.pop();
-                let expr = `(${op1}${char}${op2})`;
+                let expr = `${op1} ${char} ${op2}`;
                 stack.push(expr);
             } else {
                 throw new Error(`Invalid character '${char}' at position ${index}`);
@@ -177,14 +210,14 @@ export default class FixConverterNum {
     numPrefixToPostfix(exp) {
         let stack = [];
 
-        exp.split(' ').reverse().forEach((char, index) => {
+        this.tokenize(exp).reverse().forEach((char, index) => {
             if (this.isNum(char)) {
                 stack.push(char);
             } else if (this.isOperator(char)) {
                 if (stack.length < 2) throw new Error("Invalid prefix expression");
                 let op1 = stack.pop();
                 let op2 = stack.pop();
-                let expr = `${op1}${op2}${char}`;
+                let expr = `${op1} ${op2} ${char}`;
                 stack.push(expr);
             } else {
                 throw new Error(`Invalid character '${char}' at position ${index}`);
@@ -198,14 +231,14 @@ export default class FixConverterNum {
     numPostfixToPrefix(exp) {
         let stack = [];
 
-        exp.split(' ').forEach((char, index) => {
+        this.tokenize(exp).forEach((char, index) => {
             if (this.isNum(char)) {
                 stack.push(char);
             } else if (this.isOperator(char)) {
                 if (stack.length < 2) throw new Error("Invalid postfix expression");
                 let op2 = stack.pop();
                 let op1 = stack.pop();
-                let expr = `${char}${op1}${op2}`;
+                let expr = `${char} ${op1} ${op2}`;
                 stack.push(expr);
             } else {
                 throw new Error(`Invalid character '${char}' at position ${index}`);
@@ -219,7 +252,7 @@ export default class FixConverterNum {
     numPostfixEval(exp) {
         let stack = [];
 
-        exp.split(' ').forEach((dig, index) => {
+        this.tokenize(exp).forEach((dig, index) => {
             if (this.isNum(dig)) {
                 stack.push(dig);
             } else if (this.isOperator(dig)) {
@@ -260,7 +293,7 @@ export default class FixConverterNum {
     numPrefixEval(exp) {
         let stack = [];
 
-        exp.split(' ').reverse().forEach((dig, index) => {
+        this.tokenize(exp).reverse().forEach((dig, index) => {
             if (this.isNum(dig)) {
                 stack.push(dig);
             } else if (this.isOperator(dig)) {
